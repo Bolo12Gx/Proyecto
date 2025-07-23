@@ -1,0 +1,10 @@
+ventilador
+bicicleta
+escritorio
+pantalla
+impresora
+raton
+bocina
+cargador
+camiseta
+mochila
