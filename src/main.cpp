@@ -30,7 +30,7 @@ const string tecladoVirtual = "abcdefghijklmnopqrstuvwxyz";
 // --- CAMBIO: Ahora usa XInput para seleccionar letra ---
 char seleccionarLetraJoystick() {
     int indice = 0;
-    cout << "Usa el stick izquierdo para moverte y botón A para seleccionar." << endl;
+    cout << "Usa el stick izquierdo para moverte y boton A para seleccionar." << endl;
     while (true) {
         XINPUT_STATE state;
         ZeroMemory(&state, sizeof(XINPUT_STATE));
@@ -41,12 +41,12 @@ char seleccionarLetraJoystick() {
             // Movimiento a la derecha
             if (x > 16000 && indice < tecladoVirtual.size() - 1) {
                 indice++;
-                Sleep(200);
+                Sleep(50);
             }
             // Movimiento a la izquierda
             if (x < -16000 && indice > 0) {
                 indice--;
-                Sleep(200);
+                Sleep(50);
             }
 
             // Mostrar teclado virtual y letra seleccionada
