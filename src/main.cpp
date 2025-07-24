@@ -3,7 +3,7 @@
 #include <iostream>
 #include <ctime>
 #include <string>
-
+#include "../lib/animaciones.h"
 #include "../lib/IHtoolbox.h"
 #include "../lib/dibujo.h"
 #include "filewords.cpp" // Para leerPalabrasPorNivel
@@ -111,9 +111,18 @@ void ihJugarPartida()
             } 
         }
 
-        if(!correcta){
-            vida --;
-            fallidas += gOpcion;
+        if (!correcta)
+        {
+                vida--;
+                fallidas += gOpcion;
+
+                // 🔴 Feedback de letra incorrecta
+            animacionFeedbackLetra(false);
+            }
+                else
+            {   
+                // 🟢 Feedback de letra correcta
+            animacionFeedbackLetra(true);
         }
 
         completa = true;
@@ -128,9 +137,13 @@ void ihJugarPartida()
         if(completa)
         {
             ihLimpiarPantalla();
+            // Mostramos animación de victoria antes del mensaje final
+            animacionVictoria();
             cout<< "::: A H O R C A D O :::" << endl;
             cout<< "Felicidades, has ganado!" << endl;
             cout<< "La palabra era: " << gListaPalabras[nroAleatorio] << endl;
+            // **AQUÍ**: ANTES DE PAUSAR, LLAMAMOS LA ANIMACION ENTRE PARTIDAS
+            animacionCargaEntrePartidas();
             cout<< "Presiona ENTER para volver al menu principal..";
             cin.ignore();
             cin.get();
@@ -139,9 +152,13 @@ void ihJugarPartida()
     }
 
     ihLimpiarPantalla();
+    // Llamamos la animación de derrota justo antes de mostrar el mensaje final
+    animacionDerrota();
     cout<< "::: A H O R C A D O :::" << endl;
     cout<< "Perdiste" << endl;
     cout<< "La palabra era: " << gListaPalabras[nroAleatorio] << endl;
+    // **AQUÍ**: ANTES DE PAUSAR, LLAMAMOS LA ANIMACION ENTRE PARTIDAS
+    animacionCargaEntrePartidas();
     cout<< "Presiona ENTER para volver al menu principal..";
     cin.ignore();
     cin.get();
@@ -151,8 +168,10 @@ void ihJugarPartida()
 
 int main ()
 {
+    
     cout << "Programa iniciado..." << endl;
-
+    // Aquí llamas a la función para que se ejecute la animación
+    animacionCargaInicial();
     XINPUT_STATE state;
     ZeroMemory(&state, sizeof(XINPUT_STATE));
     DWORD dwResult = XInputGetState(0, &state);
@@ -162,7 +181,8 @@ int main ()
         system("pause");
         return 1;
     }
-
+    // MOSTRAR MENÚ ANIMADO SOLO UNA VEZ AL PRINCIPIO
+    animacionMenuPrincipal();  // ← ESTA ES LA NUEVA ANIMACIÓN
     while(true)
     {
         vida = 6;
@@ -184,6 +204,8 @@ int main ()
             dwResult = XInputGetState(0, &state);
             if (dwResult == ERROR_SUCCESS) {
                 if (state.Gamepad.wButtons & XINPUT_GAMEPAD_A) {
+                // *** Aquí ponemos la animación de transición antes de iniciar la partida ***
+                animacionTransicionNivel();
                     ihJugarPartida();
                     seleccion = true;
                 }

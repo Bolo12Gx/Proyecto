@@ -3,6 +3,7 @@
 #include <string>
 #include <cstdlib>
 #include <ctime>
+#include "../lib/animaciones.h"
 #include <SDL.h>
 
 using namespace std;
@@ -20,6 +21,8 @@ int main(int argc, char* argv[]) {
         cout << "No se pudo inicializar SDL: " << SDL_GetError() << endl;
         return 1;
     }
+    animacionCargaInicial();  // <-- Aquí
+
     categorias();
     SDL_Quit();
     system("pause");
@@ -31,6 +34,9 @@ void categorias() {
     int op;
     do {
         system("cls");
+
+        animacionMenuPrincipal();  // <-- Aquí
+
         cout << "\n\t\t\t\tJUEGO EL AHORCADO\n\n";
         cout << " CATEGORIAS\n\n";
         cout << " 1. Frutas\n";
@@ -70,6 +76,8 @@ void ingresoCategoria(int op) {
 
 // Algoritmo principal del juego
 void empezarJuego(const vector<string>& palabras, const string& nombre) {
+    animacionCargaEntrePartidas();  // <-- Aquí
+
     srand((unsigned)time(0));
     int opcion = rand() % palabras.size();
     string palabra = palabras[opcion];
@@ -92,6 +100,8 @@ void empezarJuego(const vector<string>& palabras, const string& nombre) {
         cout << endl;
 
         if (intentos == 6) {
+            animacionDerrota();  // <-- Aquí
+
             cout << "\n\n PERDISTE!!\n";
             cout << " LA SOLUCION ERA: " << palabra << "\n\n";
             cout << " Presiona ENTER para volver a jugar..";
@@ -107,6 +117,8 @@ void empezarJuego(const vector<string>& palabras, const string& nombre) {
             if (c == '_') espacios++;
 
         if (espacios == 0) {
+            animacionVictoria();  // <-- Aquí
+
             cout << "\n\n FELICIDADES.. GANASTE!!\n\n";
             cout << " Presiona ENTER para volver a jugar..";
             cin.ignore();
@@ -129,7 +141,10 @@ void empezarJuego(const vector<string>& palabras, const string& nombre) {
         if (aciertos == 0) {
             intentos++;
             puntos -= 200;
-        }
+            animacionFeedbackLetra(false);  // <-- Aquí para fallo
+        }else {
+            animacionFeedbackLetra(true);   // <-- Aquí para acierto
+            }
 
     } while (intentos != 7);
 
