@@ -1,0 +1,10 @@
+monitor
+microfono
+telefono
+caja
+fibron
+teclado
+pc
+collar
+manzana
+mesa

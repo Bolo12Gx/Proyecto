@@ -3,8 +3,10 @@
 #include <iostream>
 #include <ctime>
 #include <string>
+
 #include "../lib/IHtoolbox.h"
 #include "../lib/dibujo.h"
+#include "filewords.cpp" // Para leerPalabrasPorNivel
 
 //c++ src/main.cpp -o output/main.exe -lXinput9_1_0
 
@@ -12,13 +14,15 @@
 
 using namespace std;
 
-char gOpcion = 'a';
-string gListaPalabras[] = {"monitor", "microfono", "televisot", "telefono", "caja", "fibron", "teclado", "pc", "collar", "manzana"};
+char gOpcion = ' ';
+
+vector<string> gListaPalabras; // Ahora se carga dinámicamente
 string palabra = "";
 string fallidas = "";
 int vida = 0;
 bool correcta;
 bool completa;
+int nivel = 1;
 
 // Teclado virtual: letras de la 'a' a la 'z'
 const string tecladoVirtual = "abcdefghijklmnopqrstuvwxyz";
@@ -68,10 +72,16 @@ char seleccionarLetraJoystick() {
     }
 }
 
+
 void ihJugarPartida()
 {
     srand((int)time(NULL));
-    int nroAleatorio = rand()%10;
+    if (gListaPalabras.empty()) {
+        cout << "No hay palabras cargadas para este nivel." << endl;
+        system("pause");
+        return;
+    }
+    int nroAleatorio = rand() % gListaPalabras.size();
     palabra = "";
     fallidas = "";
 
@@ -84,6 +94,7 @@ void ihJugarPartida()
     {
         ihLimpiarPantalla();
         cout<< "Bienvenido al juego del ahorcado!"  << endl;
+        cout<< "Nivel: " << nivel << endl;
         ihDibujarAhorcado(vida);
         cout<< "Fallos: " << fallidas << endl;
         cout<< "Progreso: " << palabra << endl;
@@ -137,6 +148,7 @@ void ihJugarPartida()
     return;
 }
 
+
 int main ()
 {
     cout << "Programa iniciado..." << endl;
@@ -157,8 +169,15 @@ int main ()
         ihLimpiarPantalla();
         cout<< "Bienvenido al juego del ahorcado!"  << endl;
         cout<< ":::: MENU PRINCIPAL ::::"           << endl;
-        cout<< "Presiona botón A para jugar, botón B para salir." << endl;
-
+        
+        
+        cout<< "Selecciona el nivel (1-3) usando el teclado y presiona ENTER:" << endl;
+        cout<< "1. Facil\n2. Medio\n3. Dificil" << endl;
+        cout<< "\nNivel: ";
+        cin >> nivel;
+        if (nivel < 1 || nivel > 3) nivel = 1;
+        gListaPalabras = leerPalabrasPorNivel(nivel);
+        cout<< "Presiona boton A para jugar, boton B para salir." << endl;
         bool seleccion = false;
         while (!seleccion) {
             ZeroMemory(&state, sizeof(XINPUT_STATE));
