@@ -1,9 +1,13 @@
 #include <iostream>
+#include "../lib/color.h" 
+#include <ctime>
+
 
 using namespace std;
 
 void ihDibujarAhorcado(int vida)
 {
+    
     switch(vida)
     {
         case 6:
@@ -13,7 +17,8 @@ void ihDibujarAhorcado(int vida)
                     "      |\n"
                     "      |\n"
                     "      |\n"
-                    "=========\n";
+                    "=========\n"<< RESET;
+
             break;
         case 5:
             cout << "  +---+\n"

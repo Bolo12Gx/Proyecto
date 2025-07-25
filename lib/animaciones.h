@@ -6,6 +6,7 @@
 #include <thread>
 #include <chrono>
 #include <windows.h>  // para Sleep()
+#include "../lib/color.h"  
 
 using namespace std;
 
@@ -25,7 +26,7 @@ inline void animacionMenuPrincipal()
     // Mostrar título letra por letra simulando escritura
     for (char c : titulo)
     {
-        cout << c << flush;
+        cout << MAGENTA << c << RESET << flush;
         this_thread::sleep_for(chrono::milliseconds(2));
     }
 
@@ -34,14 +35,14 @@ inline void animacionMenuPrincipal()
     // Animación de "Presiona ENTER para comenzar..." con puntos que parpadean
     for (int i = 0; i < 3; i++)
     {
-        cout << "Presiona ENTER para comenzar";
+        cout <<  "Presiona " << BLACK << BG_ORANGE << "ENTER" << RESET << " para comenzar" << RESET;
         cout << string(i + 1, '.');
         cout << "\r";
         cout.flush();
         this_thread::sleep_for(chrono::milliseconds(500));
     }
 
-    cout << "Presiona ENTER para comenzar..." << endl;
+    cout <<  "Presiona " << BLACK << BG_ORANGE << "ENTER" << RESET << " para comenzar" << RESET << endl;
 
     cin.ignore();
     cin.get();
@@ -54,10 +55,10 @@ inline void animacionFeedbackLetra(bool acierto)
 
     if (acierto)
     {
-        string mensaje = "¡Bien hecho!";
+        string mensaje = " Bien hecho!";
         for (char c : mensaje)
         {
-            cout << c << flush;
+            cout << LGREEN << c << RESET << flush;
             this_thread::sleep_for(chrono::milliseconds(80));
         }
     }
@@ -66,7 +67,7 @@ inline void animacionFeedbackLetra(bool acierto)
         string mensaje = "Incorrecto...";
         for (char c : mensaje)
         {
-            cout << c << flush;
+            cout << RED <<  c << RESET << flush;
             this_thread::sleep_for(chrono::milliseconds(100));
         }
     }
@@ -80,22 +81,22 @@ inline void animacionCargaInicial()
     string spinner = "|/-\\";
     int spinnerLength = spinner.length();
 
-    cout << "Cargando juego, por favor espera...\n";
+    cout  << WHITE << "Cargando juego, por favor espera...\n" << RESET;
     for (int i = 0; i <= 100; ++i)
     {
-        cout << "\r" << spinner[i % spinnerLength] << " " << i << "%";
+        cout << CYAN << "\r" << spinner[i % spinnerLength] << " " << i << "%" << RESET ;
         Sleep(50);
         cout.flush();
     }
-    cout << "\nListo para jugar!\n";
+    cout << GREEN << "\nListo para jugar!\n" << RESET;
     Sleep(500);
 }
 
 // Animación simple entre partidas mostrando puntos animados
 inline void animacionCargaEntrePartidas()
 {
-    string animacion = "Cargando próxima partida";
-    cout << animacion;
+    string animacion = "Cargando proxima partida";
+    cout << CYAN << animacion;
 
     for (int i = 0; i < 3; ++i)
     {
@@ -103,14 +104,14 @@ inline void animacionCargaEntrePartidas()
         cout.flush();
         Sleep(500);
     }
-    cout << "\nListo, ¡vamos a jugar!\n";
+    cout << GREEN << "\nListo, vamos a jugar!\n";
     Sleep(500);
 }
 
 // Animación de transición de nivel con puntos animados
 inline void animacionTransicionNivel()
 {
-    cout << "Preparando el siguiente nivel";
+    cout << CYAN << "Preparando el siguiente nivel" << RESET << endl;
     for (int i = 0; i < 6; ++i)
     {
         cout << ".";
@@ -120,16 +121,16 @@ inline void animacionTransicionNivel()
     cout << endl;
 }
 
-// Animación de victoria: parpadeo de "¡¡¡GANASTE!!!"
+// Animación de victoria: parpadeo de "  GANASTE!!!"
 inline void animacionVictoria()
 {
-    const string mensaje = "¡¡¡GANASTE!!!";
+    const string mensaje = " GANASTE!!!";
     const int repeticiones = 6;
 
     for (int i = 0; i < repeticiones; ++i)
     {
         if (i % 2 == 0)
-            cout << "\r" << mensaje << "      ";
+            cout << LGREEN <<"\r" << mensaje << "      ";
         else
             cout << "\r" << string(mensaje.size(), ' ') << "      ";
 
@@ -139,16 +140,16 @@ inline void animacionVictoria()
     cout << endl;
 }
 
-// Animación de derrota: parpadeo de "¡¡¡PERDISTE!!!"
+// Animación de derrota: parpadeo de "  PERDISTE!!!"
 inline void animacionDerrota()
 {
-    const string mensaje = "¡¡¡PERDISTE!!!";
+    const string mensaje = " PERDISTE!!!";
     const int repeticiones = 6;
 
     for (int i = 0; i < repeticiones; ++i)
     {
         if (i % 2 == 0)
-            cout << "\r" << mensaje << "      ";
+            cout << RED << "\r" << mensaje << "      ";
         else
             cout << "\r" << string(mensaje.size(), ' ') << "      ";
 
