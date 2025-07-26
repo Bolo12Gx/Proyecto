@@ -1,39 +1,34 @@
-
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <string>
+#include <iostream>   // Librería para entrada y salida estándar
+#include <fstream>    // Librería para manejar archivos
+#include <vector>     // Para usar vectores
+#include <string>     // Para manipular cadenas de texto
 
 using namespace std;
 
-// Lee palabras desde un archivo según el nivel y las retorna en un vector
+// Función que lee palabras desde un archivo según el nivel
 vector<string> leerPalabrasPorNivel(int nivel) 
 {
+    // Construye el nombre del archivo basado en el nivel recibido
     string nombreArchivo = "datafile/nivel" + to_string(nivel) + ".txt";
-    ifstream archivo(nombreArchivo);
-    vector<string> palabras;
+
+    ifstream archivo(nombreArchivo); // Abre el archivo para lectura
+
+    vector<string> palabras; // Vector que almacenará las palabras
     string linea;
 
+    // Verifica si el archivo se pudo abrir correctamente
     if (archivo.is_open()) {
+        // Lee cada línea del archivo
         while (getline(archivo, linea)) {
+            // Ignora líneas vacías
             if (!linea.empty())
-                palabras.push_back(linea);
+                palabras.push_back(linea); // Agrega la palabra al vector
         }
-        archivo.close();
+        archivo.close(); // Cierra el archivo al terminar
     } else {
+        // Muestra mensaje de error si el archivo no se abre
         cout << "No se pudo abrir el archivo: " << nombreArchivo << endl;
     }
-    return palabras;
-}
 
-// Ejemplo de uso
-/*
-int main() {
-    int nivel = 1; // Cambia el nivel según lo que necesites
-    vector<string> palabras = leerPalabrasPorNivel(nivel);
-    for (const auto& palabra : palabras) {
-        cout << palabra << endl;
-    }
-    return 0;
+    return palabras; // Retorna el vector con las palabras encontradas
 }
-*/
