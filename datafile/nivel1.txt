@@ -1,10 +1,10 @@
-monitor
-microfono
-telefono
-caja
-fibron
-teclado
-pc
-collar
-manzana
-mesa
+auriculares|Sirven para escruchar musica.
+microfono|Lo usan para cantar.
+telefono| Se lo usa para llamar.
+caja|Guarda cosas.
+marcador|Los profesores lo utilizan para sus clases.
+teclado|Parte de la computadora donde se escribe.
+pc|Se la utiliza para navegar por internet.
+collar| Accesorio.
+manzana|Fruta roja.
+mesa| Mueble.
