@@ -30,22 +30,6 @@ inline void animacionMenuPrincipal()
         this_thread::sleep_for(chrono::milliseconds(2));
     }
 
-    cout << endl << endl;
-
-    // Animación de "Presiona ENTER para comenzar..." con puntos que parpadean
-    for (int i = 0; i < 3; i++)
-    {
-        cout <<  "Presiona " << BLACK << BG_ORANGE << "ENTER" << RESET << " para comenzar" << RESET;
-        cout << string(i + 1, '.');
-        cout << "\r";
-        cout.flush();
-        this_thread::sleep_for(chrono::milliseconds(500));
-    }
-
-    cout <<  "Presiona " << BLACK << BG_ORANGE << "ENTER" << RESET << " para comenzar" << RESET << endl;
-
-    cin.ignore();
-    cin.get();
 }
 
 // Animación feedback tras elegir letra correcta o incorrecta
