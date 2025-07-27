@@ -36,23 +36,6 @@ inline void animarMenu()
         cout << c << flush;
         this_thread::sleep_for(chrono::milliseconds(2));
     }
-
-    cout << endl << endl;
-
-    
-    for (int i = 0; i < 3; i++)
-    {
-        cout << "Presiona ENTER para comenzar";
-        cout << string(i + 1, '.');
-        cout << "\r";
-        cout.flush();
-        this_thread::sleep_for(chrono::milliseconds(500));
-    }
-
-    cout << "Presiona ENTER para comenzar..." << endl;
-
-    cin.ignore();
-    cin.get();
 }
 
 /**
