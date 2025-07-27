@@ -5,60 +5,75 @@
 #include <string>
 #include <thread>
 #include <chrono>
-#include <windows.h>  // para Sleep()
-#include "../lib/color.h"  
+#include <windows.h>  
 
 using namespace std;
 
-// Animación del menú principal con título tipo ASCII y mensaje parpadeante
-inline void animacionMenuPrincipal()
+/**
+ * @brief Muestra el menú principal con un título en arte ASCII y un mensaje parpadeante.
+ * 
+ * Esta función limpia la consola y presenta una animación de título,
+ * seguida por un mensaje que invita al jugador a presionar ENTER, con
+ * efecto de puntos que parpadean. Al final, espera a que el usuario presione ENTER.
+ * 
+ * @return void
+ */
+inline void animarMenu()
 {
-    system("cls");  // Limpia pantalla
+    system("cls");  
 
     string titulo = R"( 
      ___    _   _   ____   ____   ____   ___   ____   ___  
-    / _ \  | | | | |  _ \ |  _ \ |  _ \ / _ \ |  _ \ / _ \
+    / _ \  | | | | |  _ \ |  _ \ |  _ \ / _ \ |  _ \ / _ \ 
    | | | | | | | | | | | || | | || | | | | | || |_) | | | |
    | |_| | | |_| | | |_| || |_| || |_| | |_| ||  _ <| |_| |
-    \___/   \___/  |____/ |____/ |____/ \___/ |_| \_\\___/
+    \___/   \___/  |____/ |____/ |____/ \___/ |_| \_\\___/ 
     )";
 
-    // Mostrar título letra por letra simulando escritura
+    
     for (char c : titulo)
     {
-        cout << MAGENTA << c << RESET << flush;
+        cout << c << flush;
         this_thread::sleep_for(chrono::milliseconds(2));
     }
 
     cout << endl << endl;
 
-    // Animación de "Presiona ENTER para comenzar..." con puntos que parpadean
+    
     for (int i = 0; i < 3; i++)
     {
-        cout <<  "Presiona " << BLACK << BG_ORANGE << "ENTER" << RESET << " para comenzar" << RESET;
+        cout << "Presiona ENTER para comenzar";
         cout << string(i + 1, '.');
         cout << "\r";
         cout.flush();
         this_thread::sleep_for(chrono::milliseconds(500));
     }
 
-    cout <<  "Presiona " << BLACK << BG_ORANGE << "ENTER" << RESET << " para comenzar" << RESET << endl;
+    cout << "Presiona ENTER para comenzar..." << endl;
 
     cin.ignore();
     cin.get();
 }
 
-// Animación feedback tras elegir letra correcta o incorrecta
-inline void animacionFeedbackLetra(bool acierto)
+/**
+ * @brief Muestra una animación de retroalimentación tras seleccionar una letra.
+ * 
+ * Según el resultado, se imprime un mensaje de éxito o error con animación tipo máquina de escribir.
+ * 
+ * @param acierto Valor booleano que indica si la selección fue correcta (true) o incorrecta (false).
+ * 
+ * @return void
+ */
+inline void animarSeleccion(bool acierto)
 {
-    system("cls");  // Limpia pantalla antes de mostrar feedback
+    system("cls"); 
 
     if (acierto)
     {
-        string mensaje = " Bien hecho!";
+        string mensaje = "¡Bien hecho!";
         for (char c : mensaje)
         {
-            cout << LGREEN << c << RESET << flush;
+            cout << c << flush;
             this_thread::sleep_for(chrono::milliseconds(80));
         }
     }
@@ -67,7 +82,7 @@ inline void animacionFeedbackLetra(bool acierto)
         string mensaje = "Incorrecto...";
         for (char c : mensaje)
         {
-            cout << RED <<  c << RESET << flush;
+            cout << c << flush;
             this_thread::sleep_for(chrono::milliseconds(100));
         }
     }
@@ -75,28 +90,41 @@ inline void animacionFeedbackLetra(bool acierto)
     this_thread::sleep_for(chrono::milliseconds(800));
 }
 
-// Animación de carga inicial con spinner y porcentaje
-inline void animacionCargaInicial()
+/**
+ * @brief Muestra una animación de carga inicial con un spinner giratorio y porcentaje.
+ * 
+ * Esta función imprime un spinner de carga (| / - \) junto con el porcentaje
+ * desde 0% hasta 100%, simulando una barra de carga.
+ * 
+ * @return void
+ */
+inline void mostrarSpinner()
 {
     string spinner = "|/-\\";
     int spinnerLength = spinner.length();
 
-    cout  << WHITE << "Cargando juego, por favor espera...\n" << RESET;
+    cout << "Cargando juego, por favor espera...\n";
     for (int i = 0; i <= 100; ++i)
     {
-        cout << CYAN << "\r" << spinner[i % spinnerLength] << " " << i << "%" << RESET ;
+        cout << "\r" << spinner[i % spinnerLength] << " " << i << "%";
         Sleep(50);
         cout.flush();
     }
-    cout << GREEN << "\nListo para jugar!\n" << RESET;
+    cout << "\nListo para jugar!\n";
     Sleep(500);
 }
 
-// Animación simple entre partidas mostrando puntos animados
-inline void animacionCargaEntrePartidas()
+/**
+ * @brief Muestra una animación simple al cargar una nueva partida.
+ * 
+ * Simula un proceso de carga mediante puntos que aparecen progresivamente en pantalla.
+ * 
+ * @return void
+ */
+inline void animarCargaEntrePartidas()
 {
-    string animacion = "\nCargando proxima partida";
-    cout << CYAN << animacion;
+    string animacion = "Cargando próxima partida";
+    cout << animacion;
 
     for (int i = 0; i < 3; ++i)
     {
@@ -104,14 +132,20 @@ inline void animacionCargaEntrePartidas()
         cout.flush();
         Sleep(500);
     }
-    cout << GREEN << "\nListo, vamos a jugar!\n";
+    cout << "\nListo, ¡vamos a jugar!\n";
     Sleep(500);
 }
 
-// Animación de transición de nivel con puntos animados
-inline void animacionTransicionNivel()
+/**
+ * @brief Muestra una animación al cambiar de nivel.
+ * 
+ * Simula una transición de nivel mostrando puntos que se imprimen uno por uno.
+ * 
+ * @return void
+ */
+inline void animarTransicionNivel()
 {
-    cout << CYAN << "Preparando el siguiente nivel" << RESET << endl;
+    cout << "Preparando el siguiente nivel";
     for (int i = 0; i < 6; ++i)
     {
         cout << ".";
@@ -121,35 +155,22 @@ inline void animacionTransicionNivel()
     cout << endl;
 }
 
-// Animación de victoria: parpadeo de "  GANASTE!!!"
-inline void animacionVictoria()
+/**
+ * @brief Muestra una animación de victoria con texto parpadeante.
+ * 
+ * El mensaje "¡¡¡GANASTE!!!" aparece y desaparece varias veces simulando un parpadeo.
+ * 
+ * @return void
+ */
+inline void mostrarVictoria()
 {
-    const string mensaje = " GANASTE!!!";
+    const string mensaje = "¡¡¡GANASTE!!!";
     const int repeticiones = 6;
 
     for (int i = 0; i < repeticiones; ++i)
     {
         if (i % 2 == 0)
-            cout << LGREEN <<"\r" << mensaje << "      ";
-        else
-            cout << "\r" << string(mensaje.size(), ' ') << "      ";
-
-        cout.flush();
-        Sleep(400);
-    }
-    cout << endl;
-}
-
-// Animación de derrota: parpadeo de "  PERDISTE!!!"
-inline void animacionDerrota()
-{
-    const string mensaje = " PERDISTE!!!";
-    const int repeticiones = 6;
-
-    for (int i = 0; i < repeticiones; ++i)
-    {
-        if (i % 2 == 0)
-            cout << RED << "\r" << mensaje << "      ";
+            cout << "\r" << mensaje << "      ";
         else
             cout << "\r" << string(mensaje.size(), ' ') << "      ";
 
@@ -160,58 +181,27 @@ inline void animacionDerrota()
 }
 
 /**
- * @brief Muestra una animación donde el ahorcado salta.
- *
- * Imprime en consola una secuencia de dibujos ASCII que simulan al ahorcado moviéndose,
- * alternando entre varios frames. Al final muestra un mensaje de celebración.
- * No recibe parámetros ni retorna valores.
+ * @brief Muestra una animación de derrota con texto parpadeante.
+ * 
+ * El mensaje "¡¡¡PERDISTE!!!" aparece y desaparece en bucle simulando parpadeo.
+ * 
+ * @return void
  */
-inline void animacionAhorcadoSaltando()
+inline void mostrarDerrota()
 {
-    const string frames[] = {
-        R"(
-   +---+
-   |   |
-       O
-      /|\
-      / \
- =========
-)",
-        R"(
-   +---+
-   |   |
-       
-      \O/
-      / \
- =========
-)",
-        R"(
-   +---+
-   |   |
-       
-      \O/
-      / \
- =========
-)",
-        R"(
-   +---+
-   |   |
-       O
-      /|\
-      / \
- =========
-)"
-    };
+    const string mensaje = "¡¡¡PERDISTE!!!";
+    const int repeticiones = 6;
 
-    for (int i = 0; i < 6; ++i)
+    for (int i = 0; i < repeticiones; ++i)
     {
-        system("cls");
-        cout << LGREEN << frames[i % 4] << RESET << endl;
-        cout << YELLOW << "Felicidades, has ganado" << RESET << endl;
+        if (i % 2 == 0)
+            cout << "\r" << mensaje << "      ";
+        else
+            cout << "\r" << string(mensaje.size(), ' ') << "      ";
+
+        cout.flush();
         Sleep(400);
     }
-    Sleep(600);
+    cout << endl;
 }
-
-
-#endif // ANIMACIONES_H
+#endif 
