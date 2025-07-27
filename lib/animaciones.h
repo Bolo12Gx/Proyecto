@@ -6,7 +6,7 @@
 #include <thread>
 #include <chrono>
 #include <windows.h>  
-
+#include "../lib/color.h"
 using namespace std;
 
 /**
@@ -204,4 +204,59 @@ inline void mostrarDerrota()
     }
     cout << endl;
 }
-#endif 
+/**
+ * @brief Muestra una animación donde el ahorcado salta.
+ *
+ * Imprime en consola una secuencia de dibujos ASCII que simulan al ahorcado moviéndose,
+ * alternando entre varios frames. Al final muestra un mensaje de celebración.
+ * No recibe parámetros ni retorna valores.
+ */
+inline void mostrarAhorcadoSaltando()
+{
+    const string frames[] = {
+        R"(
+   +---+
+   |   |
+       O
+      /|\
+      / \
+ =========
+)",
+        R"(
+   +---+
+   |   |
+       
+      \O/
+      / \
+ =========
+)",
+        R"(
+   +---+
+   |   |
+       
+      \O/
+      / \
+ =========
+)",
+        R"(
+   +---+
+   |   |
+       O
+      /|\
+      / \
+ =========
+)"
+    };
+
+    for (int i = 0; i < 6; ++i)
+    {
+        system("cls");
+        cout << LGREEN << frames[i % 4] << RESET << endl;
+        cout << YELLOW << "Felicidades, has ganado" << RESET << endl;
+        Sleep(400);
+    }
+    Sleep(600);
+}
+
+
+#endif // ANIMACIONES_H

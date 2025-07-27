@@ -144,7 +144,8 @@ int seleccionarNivelJoystick() {
 }
 
 // Función principal del juego
-void ihJugarPartida() {
+void ihJugarPartida() 
+{
     srand((int)time(NULL));
     
     auto palabrasConPistas = leerPalabrasConPistas(nivel);
@@ -187,9 +188,9 @@ void ihJugarPartida() {
         if (!correcta) {
             vida--;
             fallidas += gOpcion;
-            animacionFeedbackLetra(false); // Feedback de letra incorrecta
+            animarSeleccion(false); // Feedback de letra incorrecta
         } else {
-            animacionFeedbackLetra(true);  // Feedback de letra correcta
+            animarSeleccion(true);  // Feedback de letra correcta
         }
 
         // Verificar si se completó la palabra
@@ -201,32 +202,34 @@ void ihJugarPartida() {
             }
         }
 
-        if(completa) {
+        if(completa) 
+        {
             ihLimpiarPantalla();
-            animacionVictoria();
+            mostrarVictoria();
             cout << BLUE << BG_CYAN << "::: A H O R C A D O :::" << RESET << endl;
             cout << LGREEN << "Felicidades, has ganado!" << RESET << endl;
             cout << BLUE << "La palabra era: " << RESET << palabraOriginal << endl;
-            animacionCargaEntrePartidas();
+            animarCargaEntrePartidas();
             esperarBotonA("Presiona " + string(BLACK) + BG_GREEN + " A " + RESET + " para volver al menu principal...");
             return;
         }
+    
     }
-
+    }
     // Manejo de derrota
     ihLimpiarPantalla();
-    animacionDerrota();
+    mostrarDerrota();
     cout << CYAN << BG_BLUE << "::: A H O R C A D O :::" << RESET << endl;
     cout << RED << "Perdiste" << RESET << endl;
     cout << BLUE << "La palabra era: " << RESET << palabraOriginal << endl;
-    animacionCargaEntrePartidas();
+    animarCargaEntrePartidas();
     esperarBotonA("Presiona " + string(BLACK) + BG_GREEN + " A " + RESET + " para volver al menu principal...");
 }
 
 // Función principal
 int main() {
     cout << CYAN << "Programa iniciado..." << endl;
-    animacionCargaInicial();
+    mostrarSpinner();
     
     // Verificar joystick
     XINPUT_STATE state;
@@ -255,7 +258,7 @@ int main() {
             ZeroMemory(&state, sizeof(XINPUT_STATE));
             if (XInputGetState(0, &state) == ERROR_SUCCESS) {
                 if (state.Gamepad.wButtons & XINPUT_GAMEPAD_A) {
-                    animacionTransicionNivel();
+                    animarTransicionNivel();
                     ihJugarPartida();
                     seleccion = true;
                 }
