@@ -53,6 +53,8 @@
         "ratio": "cpp",
         "iomanip": "cpp",
         "sstream": "cpp",
-        "variant": "cpp"
+        "variant": "cpp",
+        "stop_token": "cpp",
+        "thread": "cpp"
     }
 }
