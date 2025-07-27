@@ -7,9 +7,7 @@
 #include "../lib/IHtoolbox.h"
 #include "../lib/dibujo.h"
 #include "filewords.cpp" // Para leerPalabrasPorNivel
-#include "../lib/color.h" 
-using namespace std;
-
+#include "../lib/color.h"
 
 //c++ src/main.cpp -o output/main.exe -lXinput9_1_0
 
@@ -69,7 +67,6 @@ char seleccionarLetraJoystick() {
                 cout << endl << BLUE << "Letra seleccionada: " << RESET << tecladoVirtual[indice] << endl;
                 Sleep(300);
                 return tecladoVirtual[indice];
-                
             }
             // Detecta botón B y regresa valor especial
             if (state.Gamepad.wButtons & XINPUT_GAMEPAD_B) {
@@ -153,7 +150,7 @@ void ihJugarPartida()
         ihDibujarAhorcado(vida);
         cout<< YELLOW <<"Pista: " << RESET << pista << endl; // Mostrar pista
 
-       cout << GREEN << "\nProgreso: ";
+        cout << GREEN << "\nProgreso: ";
         for (char c : palabra) 
             cout << c << "  "; // Dos espacios entre letras
         cout << RESET << endl;
@@ -209,37 +206,30 @@ void ihJugarPartida()
         {
             vida--;
             fallidas += gOpcion;
-
         }
 
+        // --- MODIFICACIÓN: Verificar si la palabra está completa dentro del ciclo ---
         completa = true;
         for (int i = 0; i < palabra.size(); i++)
         {
             if(palabra[i] == '_')
                 completa = false;
         }
-    }
-
-
-        if(completa)
+        if (completa)
         {
             ihLimpiarPantalla();
             // Mostramos animación de victoria antes del mensaje final
-
             animacionVictoria();
             cout<< BLUE << BG_CYAN << "::: A H O R C A D O :::" << RESET << endl;
             animacionAhorcadoSaltando();
             cout << BLUE << "La palabra era: " << RESET <<  gListaPalabras[nroAleatorio] << endl;
-            // **AQUÍ**: ANTES DE PAUSAR, LLAMAMOS LA ANIMACION ENTRE PARTIDAS
             animacionCargaEntrePartidas();
-            // CAMBIO: Esperar botóB A en vez de ENTER
             esperarBotonB("Presiona " + string(BLACK) + BG_GREEN + " B " + RESET + " para volver al menu principal...");
-            // FIN CAMBIO
             return;
         }
+        // --- FIN MODIFICACIÓN ---
+    }
     
-
-
     ihLimpiarPantalla();
     // Llamamos la animación de derrota justo antes de mostrar el mensaje final
     animacionDerrota();
@@ -253,11 +243,8 @@ void ihJugarPartida()
         "=========\n";
     cout<< RED << "Perdiste" << RESET << endl;
     cout<< BLUE << "La palabra era: " << RESET <<  gListaPalabras[nroAleatorio] << endl;
-    // **AQUÍ**: ANTES DE PAUSAR, LLAMAMOS LA ANIMACION ENTRE PARTIDAS
     animacionCargaEntrePartidas();
-    // CAMBIO: Esperar botón B en vez de ENTER
     esperarBotonB("\nPresiona " + string(BLACK) + BG_GREEN + " B " + RESET + " para volver al menu principal...");
-    // FIN CAMBIO
     return;
 }
 /**
@@ -273,7 +260,7 @@ int seleccionarNivelJoystick()
     DWORD dwResult;
     cout<< "\nSelecciona el nivel usando el stick izquierdo y boton " << BLACK << BG_GREEN << " A " << RESET << " para confirmar:" << endl;
     bool nivelElegido = false;
-     while (!nivelElegido) 
+    while (!nivelElegido) 
     {
         ZeroMemory(&state, sizeof(XINPUT_STATE));
         dwResult = XInputGetState(0, &state);
@@ -284,7 +271,7 @@ int seleccionarNivelJoystick()
             if (y > 16000 && nivelSeleccionado > 1) {
                 nivelSeleccionado--;
                 Sleep(200);
-                }
+            }
             if (y < -16000 && nivelSeleccionado < 3) {
                 nivelSeleccionado++;
                 Sleep(200);
@@ -312,10 +299,8 @@ int seleccionarNivelJoystick()
 // --- CAMBIO: Menú principal joystick ---
 // FIN CAMBIO
 
-
 int main ()
 {
-    
     cout << CYAN << "Programa iniciado..." << endl;
     // Aquí llamas a la función para que se ejecute la animación
     animacionCargaInicial();
@@ -337,8 +322,7 @@ int main ()
         cout<< YELLOW << "Bienvenido al juego del ahorcado!"  << endl;
         cout<< MAGENTA << ":::: MENU PRINCIPAL ::::"          << RESET << endl;
         
-        
-       // Selección de nivel con joystick
+        // Selección de nivel con joystick
         nivel = seleccionarNivelJoystick();
         gListaPalabras = leerPalabrasPorNivel(nivel);
         
@@ -349,12 +333,11 @@ int main ()
         
         while (!seleccion) 
         {
-    
             ZeroMemory(&state, sizeof(XINPUT_STATE));
             dwResult = XInputGetState(0, &state);
             if (dwResult == ERROR_SUCCESS) {
                 if (state.Gamepad.wButtons & XINPUT_GAMEPAD_A) {
-                // *** Aquí ponemos la animación de transición antes de iniciar la partida ***
+                    // *** Aquí ponemos la animación de transición antes de iniciar la partida ***
                     animacionTransicionNivel();
                     ihJugarPartida();
                     seleccion = true;
@@ -369,7 +352,5 @@ int main ()
             }
             Sleep(100);
         }
-    } 
-
-    system("pause");
+    }
 }
