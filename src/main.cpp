@@ -159,7 +159,7 @@ void ihJugarPartida()
             return;
         }
     
-    }
+    
     }
 
 
@@ -197,7 +197,7 @@ int main ()
         return 1;
     }
     // MOSTRAR MENÚ ANIMADO SOLO UNA VEZ AL PRINCIPIO
-    animacionMenuPrincipal();  // ← ESTA ES LA NUEVA ANIMACIÓN
+    animarMenu();  // ← ESTA ES LA NUEVA ANIMACIÓN
     while(true)
     {
         vida = 6;
