@@ -83,6 +83,7 @@ void ihJugarPartida()
         system("pause");
         return;
     }
+
     int nroAleatorio = rand() % gListaPalabras.size();
     palabra = "";
     fallidas = "";
@@ -97,10 +98,13 @@ void ihJugarPartida()
         ihLimpiarPantalla();
         cout<< MAGENTA << "Bienvenido al juego del ahorcado!"  << RESET << endl;
         cout<< "Nivel: " << nivel << endl;
+
         ihDibujarAhorcado(vida);
-        cout<< RED << "Fallos: " << fallidas << RESET << endl;
-        cout<< GREEN << "Progreso: " << palabra << RESET << endl;
+
+        cout<< GREEN    << "Progreso: " << palabra      << RESET << endl;
+        cout<< RED      << "Fallos: "   << fallidas     << RESET << endl;
         cout<< "Selecciona una letra con el joystick:" << endl;
+
         gOpcion = seleccionarLetraJoystick();
 
         correcta = false;
@@ -110,21 +114,13 @@ void ihJugarPartida()
             {
                 palabra[i] = gOpcion;
                 correcta = true;
-            } 
+            }
         }
 
         if (!correcta)
         {
-                vida--;
-                fallidas += gOpcion;
-
-                // 🔴 Feedback de letra incorrecta
-            animacionFeedbackLetra(false);
-            }
-                else
-            {   
-                // 🟢 Feedback de letra correcta
-            animacionFeedbackLetra(true);
+            vida--;
+            fallidas += gOpcion + " ";
         }
 
         completa = true;
@@ -141,30 +137,58 @@ void ihJugarPartida()
             ihLimpiarPantalla();
             // Mostramos animación de victoria antes del mensaje final
             animacionVictoria();
-            cout<< BLUE << BG_CYAN << "::: A H O R C A D O :::" << RESET << endl;
-            cout<< LGREEN << "Felicidades, has ganado!" << RESET <<  endl;
-            cout << BLUE << "La palabra era: " << RESET <<  gListaPalabras[nroAleatorio] << endl;
+            cout<< BLUE << BG_CYAN  << "::: A H O R C A D O :::"    << RESET << endl;
+            cout<< LGREEN           << "Felicidades, has ganado!"   << RESET << endl;
+            animacionAhorcadoSaltando();
+            cout<< BLUE             << "La palabra era: "           << RESET << gListaPalabras[nroAleatorio] << endl;
+
+
             // **AQUÍ**: ANTES DE PAUSAR, LLAMAMOS LA ANIMACION ENTRE PARTIDAS
             animacionCargaEntrePartidas();
-            cout << "Presiona " << BLACK << BG_ORANGE << "ENTER" << RESET <<  " para volver al menu principal.."<<   endl;
-            cin.ignore();
-            cin.get();
-            return;
+
+            cout << "Presiona " << BLACK << BG_ORANGE << "X" << RESET <<  " para volver al menu principal.."<<   endl;
+            while (true) 
+            {
+                XINPUT_STATE state;
+                ZeroMemory(&state, sizeof(XINPUT_STATE));
+                DWORD dwResult = XInputGetState(0, &state);
+
+                if (dwResult == ERROR_SUCCESS && (state.Gamepad.wButtons & XINPUT_GAMEPAD_X)) {
+                    break; // Volver al menú principal
+                }
+                Sleep(100);
+            }
         }
     }
 
     ihLimpiarPantalla();
     // Llamamos la animación de derrota justo antes de mostrar el mensaje final
     animacionDerrota();
-    cout<< CYAN << BG_BLUE << "::: A H O R C A D O :::" << RESET << endl;
-    cout<< RED << "Perdiste" << RESET << endl;
-    cout<< BLUE << "La palabra era: " << RESET <<  gListaPalabras[nroAleatorio] << endl;
+    cout<< CYAN << BG_BLUE  << "::: A H O R C A D O :::"    << RESET << endl;
+    cout<< RED              << "Perdiste"                   << RESET << endl;
+    cout<<                     "  +---+\n"
+                               "  |   |\n"
+                               "  O   |\n"
+                               " /|\\ |\n"
+                               " / \\ |\n"
+                               "      |\n"
+                               "=========\n";
+
+    cout<< BLUE             << "La palabra era: "           << RESET <<  gListaPalabras[nroAleatorio] << endl;
     // **AQUÍ**: ANTES DE PAUSAR, LLAMAMOS LA ANIMACION ENTRE PARTIDAS
     animacionCargaEntrePartidas();
-    cout<< WHITE <<  "Presiona "<< RESET <<  BLACK << BG_ORANGE << "ENTER" << RESET << WHITE << " para volver al menu principal.."<< RESET <<  endl;
-    cin.ignore();
-    cin.get();
-    return;
+    cout << "Presiona " << BLACK << BG_ORANGE << "X" << RESET <<  " para volver al menu principal.."<<   endl;
+            while (true) 
+            {
+                XINPUT_STATE state;
+                ZeroMemory(&state, sizeof(XINPUT_STATE));
+                DWORD dwResult = XInputGetState(0, &state);
+
+                if (dwResult == ERROR_SUCCESS && (state.Gamepad.wButtons & XINPUT_GAMEPAD_X)) {
+                    break; // Volver al menú principal
+                }
+                Sleep(100);
+            }
 }
 
 
@@ -172,8 +196,8 @@ int main ()
 {
     
     cout << CYAN << "Programa iniciado..." << endl;
-    // Aquí llamas a la función para que se ejecute la animación
-    animacionCargaInicial();
+    //animacionCargaInicial();
+    
     XINPUT_STATE state;
     ZeroMemory(&state, sizeof(XINPUT_STATE));
     DWORD dwResult = XInputGetState(0, &state);
@@ -184,44 +208,70 @@ int main ()
         return 1;
     }
     // MOSTRAR MENÚ ANIMADO SOLO UNA VEZ AL PRINCIPIO
-    animacionMenuPrincipal();  // ← ESTA ES LA NUEVA ANIMACIÓN
+    //animacionMenuPrincipal();  // ← ESTA ES LA NUEVA ANIMACIÓN
+
     while(true)
     {
-        vida = 6;
+        bool nivelSeleccionado = false;
         ihLimpiarPantalla();
-        cout<< YELLOW << "Bienvenido al juego del ahorcado!"  << endl;
-        cout<< MAGENTA << ":::: MENU PRINCIPAL ::::"          << RESET << endl;
+            cout<< YELLOW << "Bienvenido al juego del ahorcado!"  << endl;
+            cout<< MAGENTA << ":::: MENU PRINCIPAL ::::"          << RESET << endl;
+            cout<< "Selecciona el nivel (1-3) usando las teclas B - X - Y" << endl;
+            cout<< GREEN    <<"1. Facil     \n"     << RESET 
+                << ORANGE       <<"2. Medio     \n"     << RESET 
+                << RED          <<"3. Dificil   \n"     << RESET     << endl;
+            cout<< BLUE << "\nNivel: " << RESET;
+
+        while (true) 
+        {
+            ZeroMemory(&state, sizeof(XINPUT_STATE));
+            dwResult = XInputGetState(0, &state);
+
+            switch(state.Gamepad.wButtons) {
+                case XINPUT_GAMEPAD_B:
+                    nivel = 1;
+                    break;
+                case XINPUT_GAMEPAD_X:
+                    nivel = 2;
+                    break;
+                case XINPUT_GAMEPAD_Y:
+                    nivel = 3;
+                    break;
+            }
+
+            Sleep(100);
+        }
         
-        
-        cout<< "Selecciona el nivel (1-3) usando el teclado y presiona " << BLACK << BG_ORANGE << "ENTER" << RESET " :" << endl;
-        cout<< GREEN << "1. Facil\n" << RESET << ORANGE <<  "2. Medio\n" << RESET << RED << "3. Dificil" <<RESET << endl;
-        cout<< BLUE << "\nNivel: " << RESET;
-        cin >> nivel;
         if (nivel < 1 || nivel > 3) nivel = 1;
         gListaPalabras = leerPalabrasPorNivel(nivel);
         cout<< "Presiona boton " << BLACK << BG_GREEN <<  " A " << RESET <<  " para jugar, boton " << BLACK << BG_RED << " B " << RESET << " para salir." << endl;
+        
         bool seleccion = false;
         
         while (!seleccion) {
-    
+            
             ZeroMemory(&state, sizeof(XINPUT_STATE));
             dwResult = XInputGetState(0, &state);
-            if (dwResult == ERROR_SUCCESS) {
-                if (state.Gamepad.wButtons & XINPUT_GAMEPAD_A) {
-                // *** Aquí ponemos la animación de transición antes de iniciar la partida ***
-                animacionTransicionNivel();
-                
+            if (dwResult == ERROR_SUCCESS) 
+            {
+                if (state.Gamepad.wButtons & XINPUT_GAMEPAD_A) 
+                {
+                    vida =6;
+                    animacionTransicionNivel();
                     ihJugarPartida();
                     seleccion = true;
                 }
+
                 if (state.Gamepad.wButtons & XINPUT_GAMEPAD_B) {
                     cout << MAGENTA << "Gracias por jugar!" << endl;
                     return 0;
                 }
+
             } else {
                 cout << "Joystick desconectado." << endl;
                 return 1;
             }
+
             Sleep(100);
         }
     }

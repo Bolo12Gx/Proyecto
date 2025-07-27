@@ -3,7 +3,9 @@
 #include <limits>
 #include <vector>
 #include <fstream>
+#include <Xinput.h>
 #include <windows.h> // Para usar Sleep en Windows
+#pragma once
 using namespace std;
 
 char iden = ','; // Ubicar este identificador en mis archivos de utilidad.

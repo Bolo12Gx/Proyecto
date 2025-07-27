@@ -125,7 +125,7 @@ inline void animacionTransicionNivel()
 inline void animacionVictoria()
 {
     const string mensaje = " GANASTE!!!";
-    const int repeticiones = 6;
+    const int repeticiones = 3;
 
     for (int i = 0; i < repeticiones; ++i)
     {
@@ -157,6 +157,54 @@ inline void animacionDerrota()
         Sleep(400);
     }
     cout << endl;
+}
+
+// Animación del ahorcado saltando porque no se ahorcó
+inline void animacionAhorcadoSaltando()
+{
+    const string frames[] = {
+        R"(
+   +---+
+   |   |
+       O
+      /|\
+      / \
+ =========
+)",
+        R"(
+   +---+
+   |   |
+       
+      \O/
+      / \
+ =========
+)",
+        R"(
+   +---+
+   |   |
+       
+      \O/
+      / \
+ =========
+)",
+        R"(
+   +---+
+   |   |
+       O
+      /|\
+      / \
+ =========
+)"
+    };
+
+    for (int i = 0; i < 6; ++i)
+    {
+        system("cls");
+        cout << LGREEN << frames[i % 4] << RESET << endl;
+        cout << YELLOW << "¡El ahorcado salta de alegría porque no se ahorcó!" << RESET << endl;
+        Sleep(400);
+    }
+    Sleep(600);
 }
 
 #endif // ANIMACIONES_H
