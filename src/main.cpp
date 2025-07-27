@@ -4,7 +4,6 @@
 #include <ctime>
 #include <string>
 #include "../lib/animaciones.h"
-#include "../lib/IHtoolbox.h"
 #include "../lib/dibujo.h"
 #include "filewords.cpp" // Para leerPalabrasPorNivel
 #include "../lib/color.h"
@@ -115,7 +114,7 @@ void esperarBotonB(const string& mensaje)
  * No recibe parámetros ni retorna valores.
  */
 
-void ihJugarPartida()
+void JugarPartida()
 {
     srand((int)time(NULL));
     
@@ -137,17 +136,17 @@ void ihJugarPartida()
     
     palabra = string(palabraOriginal.size(), '_');
     fallidas = "";
-    ihDibujarAhorcado(vida);
+    DibujarAhorcado(vida);
     cout<< YELLOW <<"Pista: " << RESET << pista << endl; // Mostrar pista
     
 
 
     while (vida > 0)
     {
-        ihLimpiarPantalla();
+        LimpiarPantalla();
         cout<< MAGENTA << "Bienvenido al juego del ahorcado!"  << RESET << endl;
         cout<< "Nivel: " << nivel << endl;
-        ihDibujarAhorcado(vida);
+        DibujarAhorcado(vida);
         cout<< YELLOW <<"Pista: " << RESET << pista << endl; // Mostrar pista
 
         cout << GREEN << "\nProgreso: ";
@@ -217,10 +216,10 @@ void ihJugarPartida()
         }
         if (completa)
         {
-            ihLimpiarPantalla();
+            LimpiarPantalla();
             // Mostramos animación de victoria antes del mensaje final
 
-           mostrarVictoria();
+            mostrarVictoria();
 
             cout<< BLUE << BG_CYAN << "::: A H O R C A D O :::" << RESET << endl;
             mostrarAhorcadoSaltando();
@@ -228,13 +227,17 @@ void ihJugarPartida()
 
             animarCargaEntrePartidas();
 
+            mostrarCreditos();
+            Sleep(500);
+
             esperarBotonB("Presiona " + string(BLACK) + BG_GREEN + " B " + RESET + " para volver al menu principal...");
+
             return;
         }
         // --- FIN MODIFICACIÓN ---
     }
     
-    ihLimpiarPantalla();
+    LimpiarPantalla();
     // Llamamos la animación de derrota justo antes de mostrar el mensaje final
     mostrarDerrota();
     cout<< CYAN << BG_BLUE << "::: A H O R C A D O :::" << RESET << endl;
@@ -248,9 +251,13 @@ void ihJugarPartida()
     cout<< RED << "Perdiste" << RESET << endl;
     cout<< BLUE << "La palabra era: " << RESET <<  gListaPalabras[nroAleatorio] << endl;
 
-     animarCargaEntrePartidas();
+    animarCargaEntrePartidas();
+
+    mostrarCreditos();
+    Sleep(500);
 
     esperarBotonB("\nPresiona " + string(BLACK) + BG_GREEN + " B " + RESET + " para volver al menu principal...");
+
     return;
 }
 /**
@@ -309,7 +316,7 @@ int main ()
 {
     cout << CYAN << "Programa iniciado..." << endl;
     // Aquí llamas a la función para que se ejecute la animación
-    mostrarSpinner();
+    //mostrarSpinner();
     XINPUT_STATE state;
     ZeroMemory(&state, sizeof(XINPUT_STATE));
     DWORD dwResult = XInputGetState(0, &state);
@@ -324,7 +331,7 @@ int main ()
     while(true)
     {
         vida = 6;
-        ihLimpiarPantalla();
+        LimpiarPantalla();
         cout<< YELLOW << "Bienvenido al juego del ahorcado!"  << endl;
         cout<< MAGENTA << ":::: MENU PRINCIPAL ::::"          << RESET << endl;
         
@@ -347,11 +354,13 @@ int main ()
                     // *** Aquí ponemos la animación de transición antes de iniciar la partida ***
                     animarTransicionNivel();
 
-                    ihJugarPartida();
+                    JugarPartida();
                     seleccion = true;
                 }
                 if (state.Gamepad.wButtons & XINPUT_GAMEPAD_B) {
                     cout << MAGENTA << "Gracias por jugar!" << RESET << endl;
+                    mostrarCreditos();
+                    Sleep(1000);
                     return 0;
                 }
             } else {
