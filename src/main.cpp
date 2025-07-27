@@ -212,7 +212,7 @@ int main ()
 
     while(true)
     {
-        bool nivelSeleccionado = false;
+        
         ihLimpiarPantalla();
             cout<< YELLOW << "Bienvenido al juego del ahorcado!"  << endl;
             cout<< MAGENTA << ":::: MENU PRINCIPAL ::::"          << RESET << endl;
