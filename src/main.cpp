@@ -50,7 +50,6 @@ char seleccionarLetraJoystick() {
                 indice++;
                 Sleep(200);
             }
-            // Movimiento a la izquierda
             if (x < -16000 && indice > 0) {
                 indice--;
                 Sleep(200);
@@ -64,11 +63,15 @@ char seleccionarLetraJoystick() {
             }
             cout << "   ";
 
-            // Selección con botón A
             if (state.Gamepad.wButtons & XINPUT_GAMEPAD_A) {
                 cout << endl << BLUE << "Letra seleccionada: " << RESET << tecladoVirtual[indice] << endl;
                 Sleep(300);
                 return tecladoVirtual[indice];
+            }
+            // Detecta botón B y regresa valor especial
+            if (state.Gamepad.wButtons & XINPUT_GAMEPAD_B) {
+                Sleep(300);
+                return '\0';
             }
         } else {
             cout << "\nJoystick no conectado. Conectalo y reinicia el juego." << RESET << endl;
@@ -158,6 +161,9 @@ void ihJugarPartida() {
     palabra = string(palabraOriginal.size(), '_');
     fallidas = "";
 
+
+    while (vida > 0)
+    {
     while (vida > 0) {
         ihLimpiarPantalla();
         cout << MAGENTA << "Bienvenido al juego del ahorcado!" << RESET << endl;
