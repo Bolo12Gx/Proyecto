@@ -9,6 +9,10 @@
 #include "../lib/color.h"
 using namespace std;
 
+void LimpiarPantalla() 
+{
+    system("cls");
+}
 /**
  * @brief Muestra el menú principal con un título en arte ASCII y un mensaje parpadeante.
  * 
@@ -23,12 +27,14 @@ inline void animarMenu()
     system("cls");  
 
     string titulo = R"( 
-     ___    _   _   ____   ____   ____   ___   ____   ___  
-    / _ \  | | | | |  _ \ |  _ \ |  _ \ / _ \ |  _ \ / _ \ 
-   | | | | | | | | | | | || | | || | | | | | || |_) | | | |
-   | |_| | | |_| | | |_| || |_| || |_| | |_| ||  _ <| |_| |
-    \___/   \___/  |____/ |____/ |____/ \___/ |_| \_\\___/ 
-    )";
+
+     _    _          _   _  _____  __  __           _   _   _ 
+    | |  | |   /\   | \ | |/ ____||  \/  |   /\    | \ | | | |
+    | |__| |  /  \  |  \| || |  __| \  / |  /  \   |  \| | | |
+    |  __  | / /\ \ | . ` || | |_ | |\/| | / /\ \  | . ` | | |
+    | |  | |/ ____ \| |\  || |__| | |  | |/ ____ \ | |\  | |_|
+    |_|  |_/_/    \_\_| \_|\_____ |_|  |_|_/    \_ \_| \_| (_)
+        )";
 
     
     for (char c : titulo)
@@ -36,6 +42,8 @@ inline void animarMenu()
         cout << c << flush;
         this_thread::sleep_for(chrono::milliseconds(2));
     }
+
+    Sleep(1000);
 }
 
 /**
@@ -53,7 +61,7 @@ inline void animarSeleccion(bool acierto)
 
     if (acierto)
     {
-        string mensaje = "¡Bien hecho!";
+        string mensaje = "Bien hecho!";
         for (char c : mensaje)
         {
             cout << c << flush;
@@ -106,16 +114,16 @@ inline void mostrarSpinner()
  */
 inline void animarCargaEntrePartidas()
 {
-    string animacion = "Cargando próxima partida";
+    string animacion = "\nCargando partida";
     cout << animacion;
 
     for (int i = 0; i < 3; ++i)
     {
         cout << ".";
         cout.flush();
-        Sleep(500);
+        Sleep(1000);
     }
-    cout << "\nListo, ¡vamos a jugar!\n";
+    cout << "\nListo, vamos a jugar!\n";
     Sleep(500);
 }
 
@@ -128,7 +136,7 @@ inline void animarCargaEntrePartidas()
  */
 inline void animarTransicionNivel()
 {
-    cout << "Preparando el siguiente nivel";
+    cout << "\nPreparando el siguiente nivel";
     for (int i = 0; i < 6; ++i)
     {
         cout << ".";
@@ -147,7 +155,7 @@ inline void animarTransicionNivel()
  */
 inline void mostrarVictoria()
 {
-    const string mensaje = "¡¡¡GANASTE!!!";
+    const string mensaje = "GANASTE!!!";
     const int repeticiones = 6;
 
     for (int i = 0; i < repeticiones; ++i)
@@ -172,7 +180,7 @@ inline void mostrarVictoria()
  */
 inline void mostrarDerrota()
 {
-    const string mensaje = "¡¡¡PERDISTE!!!";
+    const string mensaje = "PERDISTE!!!";
     const int repeticiones = 6;
 
     for (int i = 0; i < repeticiones; ++i)
@@ -240,4 +248,24 @@ inline void mostrarAhorcadoSaltando()
     }
     Sleep(600);
 }
+
+/**
+ * @brief Muestra la pestaña de créditos con colores y formato especial.
+ *
+ * Imprime los nombres de los autores con colores personalizados.
+ */
+inline void mostrarCreditos()
+{
+    LimpiarPantalla();
+    cout << BG_WHITE<< MAGENTA << "\n\t\t==== C R E D I T O S ====\n" << RESET << endl;
+    cout << YELLOW << "\t\tJorge Guala" << RESET << endl;
+    cout << CYAN   << "\t\tSandy Cunachi" << RESET << endl;
+    cout << MAGENTA<< "\t\tJustin Cusquillo" << RESET << endl;
+    cout << GREEN  << "\t\tMartin Correa" << RESET << endl;
+    cout << ORANGE << "\t\tPablo Orozco" << RESET << endl;
+    cout << ROSE   << "\t\tIsmael Heredia" << RESET << endl;
+    cout << BG_LBLUE << BLACK << "\n\t\tGracias por jugar!\n" << RESET << endl;
+    Sleep(2000);
+}
+
 #endif 
