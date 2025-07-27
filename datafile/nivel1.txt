@@ -1,4 +1,4 @@
-auriculares|Sirven para escruchar musica.
+auriculares|Sirven para escuchar musica.
 microfono|Lo usan para cantar.
 telefono| Se lo usa para llamar.
 caja|Guarda cosas.
