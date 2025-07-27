@@ -14,9 +14,9 @@
 
 using namespace std;
 
-char gOpcion = ' ';
+char opcion = ' ';
 
-vector<string> gListaPalabras; // Ahora se carga dinámicamente
+vector<string> listaPalabras; // Ahora se carga dinámicamente
 string palabra = "";
 string fallidas = "";
 int vida = 0;
@@ -114,7 +114,7 @@ void esperarBotonB(const string& mensaje)
  * No recibe parámetros ni retorna valores.
  */
 
-void JugarPartida()
+void jugarPartida()
 {
     srand((int)time(NULL));
     
@@ -143,7 +143,7 @@ void JugarPartida()
 
     while (vida > 0)
     {
-        LimpiarPantalla();
+        limpiarPantalla();
         cout<< MAGENTA << "Bienvenido al juego del ahorcado!"  << RESET << endl;
         cout<< "Nivel: " << nivel << endl;
         DibujarAhorcado(vida);
@@ -161,8 +161,8 @@ void JugarPartida()
         cout << RESET << endl;
 
         cout<< "\nSelecciona una letra con el joystick:" << endl;
-        gOpcion = seleccionarLetraJoystick();
-        if (gOpcion == '\0')
+        opcion = seleccionarLetraJoystick();
+        if (opcion == '\0')
         {
             animarCargaEntrePartidas();
             return; // Regresa al menú principal
@@ -170,7 +170,7 @@ void JugarPartida()
 
         bool letraYaUsada = false;
         for (char c : palabra) {
-            if (tolower(c) == tolower(gOpcion))
+            if (tolower(c) == tolower(opcion))
             {
                 letraYaUsada = true;
                 break;
@@ -180,7 +180,7 @@ void JugarPartida()
         {
             for (char c : fallidas) 
             {
-                if (tolower(c) == tolower(gOpcion)) 
+                if (tolower(c) == tolower(opcion)) 
                 {
                     letraYaUsada = true;
                     break;
@@ -195,8 +195,8 @@ void JugarPartida()
         }
         correcta = false;
         for(int i = 0; i < palabraOriginal.size(); i++) {
-            if(tolower(palabraOriginal[i]) == tolower(gOpcion)) {
-                palabra[i] = gOpcion;
+            if(tolower(palabraOriginal[i]) == tolower(opcion)) {
+                palabra[i] = opcion;
                 correcta = true;
             }
         }
@@ -204,7 +204,7 @@ void JugarPartida()
         if (!correcta)
         {
             vida--;
-            fallidas += gOpcion;
+            fallidas += opcion;
         }
 
         // --- MODIFICACIÓN: Verificar si la palabra está completa dentro del ciclo ---
@@ -216,14 +216,14 @@ void JugarPartida()
         }
         if (completa)
         {
-            LimpiarPantalla();
+            limpiarPantalla();
             // Mostramos animación de victoria antes del mensaje final
 
             mostrarVictoria();
 
             cout<< BLUE << BG_CYAN << "::: A H O R C A D O :::" << RESET << endl;
             mostrarAhorcadoSaltando();
-            cout << BLUE << "La palabra era: " << RESET <<  gListaPalabras[nroAleatorio] << endl;
+            cout << BLUE << "La palabra era: " << RESET <<  listaPalabras[nroAleatorio] << endl;
 
             animarCargaEntrePartidas();
 
@@ -237,7 +237,7 @@ void JugarPartida()
         // --- FIN MODIFICACIÓN ---
     }
     
-    LimpiarPantalla();
+    limpiarPantalla();
     // Llamamos la animación de derrota justo antes de mostrar el mensaje final
     mostrarDerrota();
     cout<< CYAN << BG_BLUE << "::: A H O R C A D O :::" << RESET << endl;
@@ -249,7 +249,7 @@ void JugarPartida()
         "      |\n"
         "=========\n";
     cout<< RED << "Perdiste" << RESET << endl;
-    cout<< BLUE << "La palabra era: " << RESET <<  gListaPalabras[nroAleatorio] << endl;
+    cout<< BLUE << "La palabra era: " << RESET <<  listaPalabras[nroAleatorio] << endl;
 
     animarCargaEntrePartidas();
 
@@ -316,7 +316,7 @@ int main ()
 {
     cout << CYAN << "Programa iniciado..." << endl;
     // Aquí llamas a la función para que se ejecute la animación
-    //mostrarSpinner();
+    mostrarSpinner();
     XINPUT_STATE state;
     ZeroMemory(&state, sizeof(XINPUT_STATE));
     DWORD dwResult = XInputGetState(0, &state);
@@ -331,13 +331,13 @@ int main ()
     while(true)
     {
         vida = 6;
-        LimpiarPantalla();
+        limpiarPantalla();
         cout<< YELLOW << "Bienvenido al juego del ahorcado!"  << endl;
         cout<< MAGENTA << ":::: MENU PRINCIPAL ::::"          << RESET << endl;
         
         // Selección de nivel con joystick
         nivel = seleccionarNivelJoystick();
-        gListaPalabras = leerPalabrasPorNivel(nivel);
+        listaPalabras = leerPalabrasPorNivel(nivel);
         
         cout << "Presiona boton " << BLACK << BG_GREEN << " A " << RESET 
              << " para jugar, boton " << BLACK << BG_RED << " B " << RESET << " para salir." << endl;
@@ -354,7 +354,7 @@ int main ()
                     // *** Aquí ponemos la animación de transición antes de iniciar la partida ***
                     animarTransicionNivel();
 
-                    JugarPartida();
+                    jugarPartida();
                     seleccion = true;
                 }
                 if (state.Gamepad.wButtons & XINPUT_GAMEPAD_B) {
