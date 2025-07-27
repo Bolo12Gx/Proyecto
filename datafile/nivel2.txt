@@ -1,10 +1,10 @@
 ventilador|Dispositivo que genera una corriente de aire para ventilar o refrescar espacios.
 bicicleta|Medio de transporte.
-escritorio|Se lo utiliza para estudiar, escribir o trabjar.
+escritorio|Se lo utiliza para estudiar, escribir o trabajar.
 pantalla| Muestra imagenes, videos o programas.
 escaner|Dispositivo que convierte documentos fisicos en archivos digitales.
 raton|Mueve el cursor de la pantalla.
-bocina|Emite sonidos, música o voces.
-cargador|Da energía al celular o a la laptop.
+bocina|Emite sonidos, musica o voces.
+cargador|Da energia al celular o a la laptop.
 camiseta|Prenda de vestir.
 mochila|Se la utilza para llevar objetos.
