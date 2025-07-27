@@ -29,7 +29,6 @@ inline void animacionMenuPrincipal()
         cout << MAGENTA << c << RESET << flush;
         this_thread::sleep_for(chrono::milliseconds(2));
     }
-
 }
 
 // Animación feedback tras elegir letra correcta o incorrecta
