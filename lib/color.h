@@ -1,6 +1,5 @@
 #include <iostream>
-//cout << RED     << " This text is RED!     " << endl;
-//===Color font code===/
+
 #define BLACK   "\x1B[30m"
 #define RED     "\x1b[31m"
 #define GREEN   "\x1b[32m"
@@ -15,7 +14,7 @@
 #define LGREEN  "\x1B[38;2;17;245;120m"
 #define GRAY    "\x1B[38;2;176;174;174m"
 #define RESET   "\x1b[0m"
-//===Color background code===/
+// Para Background Colors
 #define BG_BLACK   "\x1B[40m"
 #define BG_RED     "\x1B[41m"
 #define BG_GREEN   "\x1B[42m"

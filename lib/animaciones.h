@@ -9,16 +9,14 @@
 #include "../lib/color.h"
 using namespace std;
 
-void LimpiarPantalla() 
+void limpiarPantalla() 
 {
     system("cls");
 }
 /**
  * @brief Muestra el menú principal con un título en arte ASCII y un mensaje parpadeante.
  * 
- * Esta función limpia la consola y presenta una animación de título,
- * seguida por un mensaje que invita al jugador a presionar ENTER, con
- * efecto de puntos que parpadean. Al final, espera a que el usuario presione ENTER.
+ * Esta función limpia la consola y presenta una animación de título con las palabras HANGMAN que significan ahorcado en inglés.
  * 
  * @return void
  */
@@ -124,7 +122,7 @@ inline void animarCargaEntrePartidas()
         Sleep(1000);
     }
     cout << "\nListo, vamos a jugar!\n";
-    Sleep(500);
+    Sleep(1000);
 }
 
 /**
@@ -256,7 +254,7 @@ inline void mostrarAhorcadoSaltando()
  */
 inline void mostrarCreditos()
 {
-    LimpiarPantalla();
+    limpiarPantalla();
     cout << BG_WHITE<< MAGENTA << "\n\t\t==== C R E D I T O S ====\n" << RESET << endl;
     cout << YELLOW << "\t\tJorge Guala" << RESET << endl;
     cout << CYAN   << "\t\tSandy Cunachi" << RESET << endl;
