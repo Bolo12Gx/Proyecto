@@ -75,6 +75,7 @@ char seleccionarLetraJoystick() {
 }
 
 
+
 void ihJugarPartida()
 {
     srand((int)time(NULL));
@@ -121,18 +122,14 @@ void ihJugarPartida()
             }
         }
 
-        if (!correcta)
-        {
-                vida--;
-                fallidas += gOpcion;
 
-                // 🔴 Feedback de letra incorrecta
-            animacionFeedbackLetra(false);
-            }
-                else
-            {   
-                // 🟢 Feedback de letra correcta
-            animacionFeedbackLetra(true);
+        if (!correcta) {
+            vida--;
+            fallidas += gOpcion;
+            animarSeleccion(false); // Feedback de letra incorrecta
+        } else {
+            animarSeleccion(true);  // Feedback de letra correcta
+
         }
 
         completa = true;
@@ -144,35 +141,41 @@ void ihJugarPartida()
             }
         }
 
+
         if(completa)
         {
             ihLimpiarPantalla();
             // Mostramos animación de victoria antes del mensaje final
-            animacionVictoria();
+            mostrarVictoria();
             cout<< BLUE << BG_CYAN << "::: A H O R C A D O :::" << RESET << endl;
             cout<< LGREEN << "Felicidades, has ganado!" << RESET <<  endl;
             cout << BLUE << "La palabra era: " << RESET <<  gListaPalabras[nroAleatorio] << endl;
             // **AQUÍ**: ANTES DE PAUSAR, LLAMAMOS LA ANIMACION ENTRE PARTIDAS
-            animacionCargaEntrePartidas();
+            animarCargaEntrePartidas();
             cout << "Presiona " << BLACK << BG_ORANGE << "ENTER" << RESET <<  " para volver al menu principal.."<<   endl;
             cin.ignore();
             cin.get();
+
             return;
         }
+    
     }
+    }
+
 
     ihLimpiarPantalla();
     // Llamamos la animación de derrota justo antes de mostrar el mensaje final
-    animacionDerrota();
+    mostrarDerrota();
     cout<< CYAN << BG_BLUE << "::: A H O R C A D O :::" << RESET << endl;
     cout<< RED << "Perdiste" << RESET << endl;
     cout<< BLUE << "La palabra era: " << RESET <<  gListaPalabras[nroAleatorio] << endl;
     // **AQUÍ**: ANTES DE PAUSAR, LLAMAMOS LA ANIMACION ENTRE PARTIDAS
-    animacionCargaEntrePartidas();
+    animarCargaEntrePartidas();
     cout<< WHITE <<  "Presiona "<< RESET <<  BLACK << BG_ORANGE << "ENTER" << RESET << WHITE << " para volver al menu principal.."<< RESET <<  endl;
     cin.ignore();
     cin.get();
     return;
+
 }
 
 
@@ -180,8 +183,10 @@ int main ()
 {
     
     cout << CYAN << "Programa iniciado..." << endl;
+
     // Aquí llamas a la función para que se ejecute la animación
-    animacionCargaInicial();
+    mostrarSpinner();
+
     XINPUT_STATE state;
     ZeroMemory(&state, sizeof(XINPUT_STATE));
     DWORD dwResult = XInputGetState(0, &state);
@@ -216,8 +221,9 @@ int main ()
             dwResult = XInputGetState(0, &state);
             if (dwResult == ERROR_SUCCESS) {
                 if (state.Gamepad.wButtons & XINPUT_GAMEPAD_A) {
-                // *** Aquí ponemos la animación de transición antes de iniciar la partida ***
-                animacionTransicionNivel();
+
+                    // *** Aquí ponemos la animación de transición antes de iniciar la partida ***
+                    animarTransicionNivel();
                 
                     ihJugarPartida();
                     seleccion = true;
