@@ -338,13 +338,13 @@ int main ()
         cout<< MAGENTA << ":::: MENU PRINCIPAL ::::"          << RESET << endl;
         
         
-        cout<< "Selecciona el nivel (1-3) usando el teclado y presiona " << BLACK << BG_ORANGE << "ENTER" << RESET " :" << endl;
-        cout<< GREEN << "1. Facil\n" << RESET << ORANGE <<  "2. Medio\n" << RESET << RED << "3. Dificil" <<RESET << endl;
-        cout<< BLUE << "\nNivel: " << RESET;
-        cin >> nivel;
-        if (nivel < 1 || nivel > 3) nivel = 1;
+       // Selección de nivel con joystick
+        nivel = seleccionarNivelJoystick();
         gListaPalabras = leerPalabrasPorNivel(nivel);
-        cout<< "Presiona boton " << BLACK << BG_GREEN <<  " A " << RESET <<  " para jugar, boton " << BLACK << BG_RED << " B " << RESET << " para salir." << endl;
+        
+        cout << "Presiona boton " << BLACK << BG_GREEN << " A " << RESET 
+             << " para jugar, boton " << BLACK << BG_RED << " B " << RESET << " para salir." << endl;
+        
         bool seleccion = false;
         
         while (!seleccion) 
