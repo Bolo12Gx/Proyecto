@@ -5,6 +5,6 @@ caja|Guarda cosas.
 marcador|Los profesores lo utilizan para sus clases.
 teclado|Parte de la computadora donde se escribe.
 pc|Se la utiliza para navegar por internet.
-collar| Accesorio.
+collar| Accesorio de mujer.
 manzana|Fruta roja.
 mesa| Mueble.

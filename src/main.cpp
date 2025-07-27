@@ -29,10 +29,17 @@ int nivel = 1;
 // Teclado virtual: letras de la 'a' a la 'z'
 const string tecladoVirtual = "abcdefghijklmnopqrstuvwxyz";
 
-// --- CAMBIO: Ahora usa XInput para seleccionar letra ---
+/**
+ * @brief Permite al usuario seleccionar una letra usando el joystick.
+ *
+ * Muestra un teclado virtual en pantalla y permite navegar con el stick izquierdo.
+ * El usuario selecciona una letra con el botón A. Si presiona el botón B, retorna '\0' para indicar que desea regresar al menú principal.
+ * @return La letra seleccionada, o '\0' si se presionó el botón B.
+ */
 char seleccionarLetraJoystick() {
     int indice = 0;
-    cout <<  "Usa el stick " << BLACK << BG_YELLOW << "izquierdo" << RESET <<  " para moverte y boton " << BLACK << BG_GREEN<< " A " << RESET << " para seleccionar." << endl;
+    cout <<  "\nUsa el stick " << BLACK << BG_YELLOW << "izquierdo" << RESET <<  " para moverte y boton " << BLACK << BG_GREEN<< " A " << RESET << " para seleccionar." << endl;
+    cout << CYAN << "\nPresiona boton " << BLACK << BG_RED << " B " << RESET << " para regresar al menu principal." << endl;
     while (true) {
         XINPUT_STATE state;
         ZeroMemory(&state, sizeof(XINPUT_STATE));
@@ -40,18 +47,15 @@ char seleccionarLetraJoystick() {
 
         if (dwResult == ERROR_SUCCESS) {
             SHORT x = state.Gamepad.sThumbLX;
-            // Movimiento a la derecha
             if (x > 16000 && indice < tecladoVirtual.size() - 1) {
                 indice++;
                 Sleep(200);
             }
-            // Movimiento a la izquierda
             if (x < -16000 && indice > 0) {
                 indice--;
                 Sleep(200);
             }
 
-            // Mostrar teclado virtual y letra seleccionada
             cout << "\r";
             for (int i = 0; i < tecladoVirtual.size(); ++i) {
                 if (i == indice) cout << "[" << tecladoVirtual[i] << "]";
@@ -59,11 +63,15 @@ char seleccionarLetraJoystick() {
             }
             cout << "   ";
 
-            // Selección con botón A
             if (state.Gamepad.wButtons & XINPUT_GAMEPAD_A) {
                 cout << endl << BLUE << "Letra seleccionada: " << RESET << tecladoVirtual[indice] << endl;
                 Sleep(300);
                 return tecladoVirtual[indice];
+            }
+            // Detecta botón B y regresa valor especial
+            if (state.Gamepad.wButtons & XINPUT_GAMEPAD_B) {
+                Sleep(300);
+                return '\0';
             }
         } else {
             cout << "\nJoystick no conectado. Conectalo y reinicia el juego." << RESET << endl;
@@ -74,14 +82,20 @@ char seleccionarLetraJoystick() {
     }
 }
 
-void esperarBotonA(const string& mensaje) {
+/**
+ * @brief Espera hasta que el usuario presione el botón B en el joystick.
+ *
+ * Muestra un mensaje en pantalla y entra en un bucle hasta que se detecta el botón B presionado.
+ * @param mensaje Mensaje que se muestra al usuario mientras espera.
+ */
+void esperarBotonB(const string& mensaje) {
     cout << mensaje << endl;
     while (true) {
         XINPUT_STATE state;
         ZeroMemory(&state, sizeof(XINPUT_STATE));
         DWORD dwResult = XInputGetState(0, &state);
         if (dwResult == ERROR_SUCCESS) {
-            if (state.Gamepad.wButtons & XINPUT_GAMEPAD_A) {
+            if (state.Gamepad.wButtons & XINPUT_GAMEPAD_B) {
                 Sleep(300);
                 break;
             }
@@ -93,6 +107,13 @@ void esperarBotonA(const string& mensaje) {
 // --- CAMBIO: Retorno al menú principal con joystick ---
 // FIN CAMBIO
 
+/**
+ * @brief Ejecuta una partida del juego del ahorcado.
+ *
+ * Muestra la palabra oculta, la pista y el progreso del jugador. Permite seleccionar letras con el joystick.
+ * Si el usuario presiona el botón B, regresa al menú principal. Muestra animaciones de victoria o derrota según el resultado.
+ * No recibe parámetros ni retorna valores.
+ */
 void ihJugarPartida()
 {
     srand((int)time(NULL));
@@ -125,10 +146,51 @@ void ihJugarPartida()
         ihDibujarAhorcado(vida);
         cout<< YELLOW <<"Pista: " << RESET << pista << endl; // Mostrar pista
 
-        cout<< RED << "Fallos: " << fallidas << RESET << endl;
-        cout<< GREEN << "Progreso: " << palabra << RESET << endl;
-        cout<< "Selecciona una letra con el joystick:" << endl;
+        cout << GREEN << "\nProgreso: ";
+        for (char c : palabra) 
+            cout << c << "  "; // Dos espacios entre letras
+        cout << RESET << endl;
+
+        cout << RED << "\nFallos: ";
+
+        for (char c : fallidas)
+            cout << c << "  "; // Dos espacios entre letras fallidas
+        cout << RESET << endl;
+
+        cout<< "\nSelecciona una letra con el joystick:" << endl;
+
         gOpcion = seleccionarLetraJoystick();
+        if (gOpcion == '\0')
+        {
+            animacionCargaEntrePartidas();
+            return; // Regresa al menú principal
+        }
+
+        bool letraYaUsada = false;
+        for (char c : palabra) {
+            if (tolower(c) == tolower(gOpcion))
+            {
+                letraYaUsada = true;
+                break;
+            }
+        }
+        if (!letraYaUsada) 
+        {
+            for (char c : fallidas) 
+            {
+                if (tolower(c) == tolower(gOpcion)) 
+                {
+                    letraYaUsada = true;
+                    break;
+                }
+            }
+        }
+
+        if (letraYaUsada) {
+            cout << RED << "\nYa usaste esa letra! Elige otra." << RESET << endl;
+            Sleep(1200); // Espera un momento para que el usuario vea el mensaje
+            continue;    // Vuelve a pedir letra
+        }
 
         correcta = false;
         for(int i = 0; i < palabraOriginal.size(); i++) {
@@ -140,39 +202,32 @@ void ihJugarPartida()
 
         if (!correcta)
         {
-                vida--;
-                fallidas += gOpcion;
+            vida--;
+            fallidas += gOpcion;
 
-                // 🔴 Feedback de letra incorrecta
-            animacionFeedbackLetra(false);
-            }
-                else
-            {   
-                // 🟢 Feedback de letra correcta
-            animacionFeedbackLetra(true);
         }
+
 
         completa = true;
         for (int i = 0; i < palabra.size(); i++)
         {
             if(palabra[i] == '_')
-            {
                 completa = false;
-            }
         }
 
         if(completa)
         {
             ihLimpiarPantalla();
             // Mostramos animación de victoria antes del mensaje final
+
             animacionVictoria();
             cout<< BLUE << BG_CYAN << "::: A H O R C A D O :::" << RESET << endl;
-            cout<< LGREEN << "Felicidades, has ganado!" << RESET <<  endl;
+            animacionAhorcadoSaltando();
             cout << BLUE << "La palabra era: " << RESET <<  gListaPalabras[nroAleatorio] << endl;
             // **AQUÍ**: ANTES DE PAUSAR, LLAMAMOS LA ANIMACION ENTRE PARTIDAS
             animacionCargaEntrePartidas();
-            // CAMBIO: Esperar botón A en vez de ENTER
-            esperarBotonA("Presiona " + string(BLACK) + BG_GREEN + " A " + RESET + " para volver al menu principal...");
+            // CAMBIO: Esperar botóB A en vez de ENTER
+            esperarBotonB("Presiona " + string(BLACK) + BG_GREEN + " B " + RESET + " para volver al menu principal...");
             // FIN CAMBIO
             return;
         }
@@ -182,27 +237,43 @@ void ihJugarPartida()
     // Llamamos la animación de derrota justo antes de mostrar el mensaje final
     animacionDerrota();
     cout<< CYAN << BG_BLUE << "::: A H O R C A D O :::" << RESET << endl;
+    cout << "  +---+\n"
+        "  |   |\n"
+        "  O   |\n"
+        " /|\\  |\n"
+        " / \\  |\n"
+        "      |\n"
+        "=========\n";
     cout<< RED << "Perdiste" << RESET << endl;
     cout<< BLUE << "La palabra era: " << RESET <<  gListaPalabras[nroAleatorio] << endl;
     // **AQUÍ**: ANTES DE PAUSAR, LLAMAMOS LA ANIMACION ENTRE PARTIDAS
     animacionCargaEntrePartidas();
-    // CAMBIO: Esperar botón A en vez de ENTER
-    esperarBotonA("Presiona " + string(BLACK) + BG_GREEN + " A " + RESET + " para volver al menu principal...");
+    // CAMBIO: Esperar botón B en vez de ENTER
+    esperarBotonB("\nPresiona " + string(BLACK) + BG_GREEN + " B " + RESET + " para volver al menu principal...");
     // FIN CAMBIO
     return;
 }
 
+/**
+ * @brief Permite al usuario seleccionar el nivel de dificultad usando el joystick.
+ *
+ * Muestra los niveles disponibles y permite navegar con el stick izquierdo. El usuario confirma el nivel con el botón A.
+ * @return El número de nivel seleccionado.
+ */
 int seleccionarNivelJoystick() {
     int nivelSeleccionado = 1;
     XINPUT_STATE state;
     DWORD dwResult;
-    cout<< "Selecciona el nivel usando el stick izquierdo y boton " << BLACK << BG_GREEN << " A " << RESET << " para confirmar:" << endl;
+    cout<< "\nSelecciona el nivel usando el stick izquierdo y boton " << BLACK << BG_GREEN << " A " << RESET << " para confirmar:" << endl;
     bool nivelElegido = false;
-    while (!nivelElegido) {
+    while (!nivelElegido) 
+    {
         ZeroMemory(&state, sizeof(XINPUT_STATE));
         dwResult = XInputGetState(0, &state);
+
         if (dwResult == ERROR_SUCCESS) {
             SHORT y = state.Gamepad.sThumbLY;
+
             if (y > 16000 && nivelSeleccionado > 1) {
                 nivelSeleccionado--;
                 Sleep(200);
@@ -211,11 +282,14 @@ int seleccionarNivelJoystick() {
                 nivelSeleccionado++;
                 Sleep(200);
             }
+
             cout << "\rNivel: ";
+
             for (int i = 1; i <= 3; ++i) {
                 if (i == nivelSeleccionado) cout << "[" << i << "] ";
                 else cout << i << " ";
             }
+
             cout << "   ";
             if (state.Gamepad.wButtons & XINPUT_GAMEPAD_A) {
                 Sleep(300);
@@ -236,7 +310,9 @@ int main ()
     
     cout << CYAN << "Programa iniciado..." << endl;
     // Aquí llamas a la función para que se ejecute la animación
+
     animacionCargaInicial();
+
     XINPUT_STATE state;
     ZeroMemory(&state, sizeof(XINPUT_STATE));
     DWORD dwResult = XInputGetState(0, &state);
@@ -246,6 +322,7 @@ int main ()
         system("pause");
         return 1;
     }
+
     // MOSTRAR MENÚ ANIMADO SOLO UNA VEZ AL PRINCIPIO
     //animacionMenuPrincipal();  // ← ESTA ES LA NUEVA ANIMACIÓN
     while(true)
@@ -258,12 +335,15 @@ int main ()
         // CAMBIO: Selección de nivel con joystick
         nivel = seleccionarNivelJoystick();
         gListaPalabras = leerPalabrasPorNivel(nivel);
+
         cout<< "Presiona boton " << BLACK << BG_GREEN <<  " A " << RESET <<  " para jugar, boton " << BLACK << BG_RED << " B " << RESET << " para salir." << endl;
         bool seleccion = false;
         
-        while (!seleccion) {
+        while (!seleccion)
+        {
             ZeroMemory(&state, sizeof(XINPUT_STATE));
             dwResult = XInputGetState(0, &state);
+
             if (dwResult == ERROR_SUCCESS) {
                 if (state.Gamepad.wButtons & XINPUT_GAMEPAD_A) {
                     // *** Aquí ponemos la animación de transición antes de iniciar la partida ***
