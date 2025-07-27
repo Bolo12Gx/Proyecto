@@ -78,19 +78,27 @@ char seleccionarLetraJoystick() {
 void ihJugarPartida()
 {
     srand((int)time(NULL));
-    if (gListaPalabras.empty()) {
+    
+    auto palabrasConPistas = leerPalabrasConPistas(nivel);
+    if (!palabrasConPistas.empty()) {
+        cout << MAGENTA << "Palabra: " << RESET << palabrasConPistas[0].first << endl; 
+    } else {
+        cout << "No hay palabras disponibles para este nivel." << endl;
+    }
+    if (palabrasConPistas.empty()) {
         cout << BLACK << "No hay palabras cargadas para este nivel." << RESET << endl;
         system("pause");
         return;
     }
-    int nroAleatorio = rand() % gListaPalabras.size();
-    palabra = "";
+
+    int nroAleatorio = rand() % palabrasConPistas.size();
+    string palabraOriginal = palabrasConPistas[nroAleatorio].first;
+    string pista = palabrasConPistas[nroAleatorio].second; // Si no hay pista, dejar vacío o asignar según tu lógica
+    
+    palabra = string(palabraOriginal.size(), '_');
     fallidas = "";
 
-    for(int i=0; i<gListaPalabras[nroAleatorio].size(); i++)
-    {
-        palabra += "_";
-    }
+
 
     while (vida > 0)
     {
@@ -98,19 +106,19 @@ void ihJugarPartida()
         cout<< MAGENTA << "Bienvenido al juego del ahorcado!"  << RESET << endl;
         cout<< "Nivel: " << nivel << endl;
         ihDibujarAhorcado(vida);
+        cout<< YELLOW <<"Pista: " << RESET << pista << endl; // Mostrar pista
+
         cout<< RED << "Fallos: " << fallidas << RESET << endl;
         cout<< GREEN << "Progreso: " << palabra << RESET << endl;
         cout<< "Selecciona una letra con el joystick:" << endl;
         gOpcion = seleccionarLetraJoystick();
 
         correcta = false;
-        for(int i=0; i< gListaPalabras[nroAleatorio].size(); i++)
-        {
-            if(gListaPalabras[nroAleatorio][i] == gOpcion)
-            {
+        for(int i = 0; i < palabraOriginal.size(); i++) {
+            if(tolower(palabraOriginal[i]) == tolower(gOpcion)) {
                 palabra[i] = gOpcion;
                 correcta = true;
-            } 
+            }
         }
 
         if (!correcta)
@@ -215,7 +223,7 @@ int main ()
                     seleccion = true;
                 }
                 if (state.Gamepad.wButtons & XINPUT_GAMEPAD_B) {
-                    cout << MAGENTA << "Gracias por jugar!" << endl;
+                    cout << MAGENTA << "Gracias por jugar!" << RESET << endl;
                     return 0;
                 }
             } else {
@@ -224,7 +232,7 @@ int main ()
             }
             Sleep(100);
         }
-    }
+    } 
 
     system("pause");
 }
