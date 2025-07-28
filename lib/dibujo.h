@@ -18,7 +18,7 @@ using namespace std;
  * - 1 vida : una pierna
  * - 0 vidas: figura completa (ahorcado)
  */
-void DibujarAhorcado(int vida)
+void dibujarAhorcado(int vida)
 {
     switch(vida)
     {

@@ -5,7 +5,7 @@
 #include <string>
 #include "../lib/animaciones.h"
 #include "../lib/dibujo.h"
-#include "filewords.cpp" // Para leerPalabrasPorNivel
+#include "extraerPalabras.cpp" // Para leerPalabrasPorNivel
 #include "../lib/color.h"
 
 //c++ src/main.cpp -o output/main.exe -lXinput9_1_0
@@ -136,7 +136,7 @@ void jugarPartida()
     
     palabra = string(palabraOriginal.size(), '_');
     fallidas = "";
-    DibujarAhorcado(vida);
+    dibujarAhorcado(vida);
     cout<< YELLOW <<"Pista: " << RESET << pista << endl; // Mostrar pista
     
 
@@ -146,7 +146,7 @@ void jugarPartida()
         limpiarPantalla();
         cout<< MAGENTA << "Bienvenido al juego del ahorcado!"  << RESET << endl;
         cout<< "Nivel: " << nivel << endl;
-        DibujarAhorcado(vida);
+        dibujarAhorcado(vida);
         cout<< YELLOW <<"Pista: " << RESET << pista << endl; // Mostrar pista
 
         cout << GREEN << "\nProgreso: ";
